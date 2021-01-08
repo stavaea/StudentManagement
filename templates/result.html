@@ -1,0 +1,44 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>慧测科技</title>
+        <link rel="icon" href="{% static "img/logo.ico"%}" type="image/x-icon"/>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/normalize.css' %}"/>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/demo.css' %}"/>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/component.css' %}"/>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/cs-select.css' %}"/>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/cs-skin-boxes.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/x0popup.min.css' %}"/>
+		<script src="{% static 'js/modernizr.custom.js' %}"></script>
+        <script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
+        <script src="{% static 'js/x0popup.min.js' %}"></script>
+	</head>
+
+    <body>
+        <div class="container">
+            <div class="fs-form-wrap" id="fs-form-wrap">
+            </div>
+        </div>
+    </body>
+<script>
+    var data = {{ data|safe }}
+
+    if(data['flag'] == 0){
+        x0p('提交成功', '感谢您的配合','ok',
+        function() {
+            window.location.href ="/base/";
+        });
+    }else {
+        x0p('提交失败', data['message'],'error',
+        function() {
+            window.location.href ="/base/";
+        });
+    }
+
+</script>
+
+</html>

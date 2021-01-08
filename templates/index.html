@@ -1,0 +1,127 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1"> 
+		<title>慧测科技</title>
+        <link rel="icon" href="{% static "img/logo.ico"%}" type="image/x-icon"/>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/normalize.css' %}"/>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/demo.css' %}"/>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/component.css' %}"/>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/cs-select.css' %}"/>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/cs-skin-boxes.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/x0popup.min.css' %}"/>
+		<script src="{% static 'js/modernizr.custom.js' %}"></script>
+        <script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
+        <script src="{% static 'js/x0popup.min.js' %}"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="fs-form-wrap" id="fs-form-wrap">
+				<div class="fs-title">
+					<h1 style="color: #FF4500">学生信息调查问卷</h1>
+				</div>
+				<form id="myform" class="fs-form fs-form-full" autocomplete="off" action="/base_input/" method="post">
+					<ol class="fs-fields">
+						<li data-input-trigger>
+							<label class="fs-field-label fs-anim-upper" for="q4" data-info="可以选择多项">您学习过慧测哪门课程?</label>
+                            <input class="fs-anim-lower" id="q1" name="q1" type="text" style="display: none" required/>
+							<div class="fs-radio-group fs-radio-custom clearfix fs-anim-lower">
+                                <span class="kecheng" name="基础就业班"><label for="q1a" class="radio-social" style="color: #e1e7cd">基础就业班</label></span>
+                            	<span class="kecheng" name="性能测试"><label for="q1b" class="radio-conversion" style="color: #e1e7cd">性能测试</label></span>
+                                <span class="kecheng" name="自动化测试"><label  for="q1c" class="radio-mobile" style="color: #e1e7cd">自动化测试</label></span>
+                                <span class="kecheng" name="测试开发"><label  for="q1d" class="radio-development" style="color: #e1e7cd">测试开发</label></span>
+							</div>
+						</li>
+
+						<li>
+							<label class="fs-field-label fs-anim-upper" for="q1">您的姓名?</label>
+							<input class="fs-anim-lower" id="q2" name="q2" type="text" required/>
+						</li>
+						<li>
+							<label class="fs-field-label fs-anim-upper" for="q2" data-info="我们承诺：替您保守秘密">您目前在职的公司名称?</label>
+							<input class="fs-anim-lower" id="q3" name="q3" required/>
+						</li>
+
+                        <li>
+							<label class="fs-field-label fs-anim-upper" for="q3">您目前的月薪?</label>
+							<input class="fs-mark fs-anim-lower" id="q4" name="q4" type="number" step="1000" min="1000" required/>
+						</li>
+
+						<li>
+							<label class="fs-field-label fs-anim-upper" for="q5">您的手机号？</label>
+							<input class="fs-anim-lower" id="q5" name="q5" required/>
+						</li>
+					</ol><!-- /fs-fields -->
+					<button class="fs-submit" type="submit">提交问卷</button>
+				</form><!-- /fs-form -->
+			</div><!-- /fs-form-wrap -->
+
+		</div><!-- /container -->
+        <script src="{% static 'js/classie.js' %}"></script>
+		<script src="{% static 'js/fullscreenForm.js' %}"></script>
+        <script src="{% static 'js/selectFx.js' %}"></script>
+        <script>
+            $('span.kecheng').on('click',function(){
+                var kecheng_text = $(this).attr('name')
+                var ke_value = ''
+                var span = $(this).children()
+                x0p('请输入期数：', null, 'input',
+                    function(button, text) {
+                        if(button == 'info') {
+                            if (text && !(isNaN(text))) {
+                                kecheng_text = kecheng_text+text+'期';
+                                x0p(kecheng_text,
+                                    '',
+                                    'ok', false);
+                               if(span.text().indexOf("基础就业班") == 0){
+                                   ke_value = '1_'+text
+                               }else if(span.text().indexOf("性能测试") == 0){
+                                   ke_value = '2_'+text
+                               }else if(span.text().indexOf("自动化测试") == 0){
+                                    ke_value = '3_'+text
+                               }else if(span.text().indexOf("测试开发") == 0){
+                                    ke_value = '4_'+text
+                               }
+                               $('#q1').val($('#q1').val()+ke_value+'a')
+                               span.text(kecheng_text)
+                               span.css("color", "#DA70D6")
+
+                            }else{
+                                x0p('输入无效',
+                                '',
+                                'warning', false);
+                            }
+                        }
+                        if(button == 'cancel') {
+                            x0p('已取消',
+                                '',
+                                'error', false);
+                        }
+                    });
+            });
+        </script>
+		<script>
+			(function() {
+				var formWrap = document.getElementById( 'fs-form-wrap' );
+
+				[].slice.call( document.querySelectorAll( 'select.cs-select' ) ).forEach( function(el) {
+					new SelectFx( el, {
+						stickyPlaceholder: false,
+						onChange: function(val){
+							document.querySelector('span.cs-placeholder').style.backgroundColor = val;
+						}
+					});
+				} );
+
+				new FForm( formWrap, {
+					onReview : function() {
+						classie.add( document.body, 'overview' ); // for demo purposes only
+					}
+				} );
+			})();
+		</script>
+	</body>
+</html>
